@@ -1,7 +1,6 @@
 {
   "name": "moudarir/mime-detector",
   "description": "A PHP library for detecting the real MIME type of files by analyzing their content.",
-  "version": "1.0.0",
   "type": "library",
   "homepage": "https://github.com/moudarir/mime-detector",
   "license": "MIT",
