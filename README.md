@@ -47,7 +47,7 @@ try {
     $result = MimeType::detect('/path/to/file.pdf');
     echo $result->mimeValue();
 } catch (MimeTypeException $exception) {
-    echo $exception->getMessage():
+    echo $exception->getMessage();
 }
 ```
 
@@ -227,7 +227,7 @@ try {
     echo PHP_EOL;
     echo $result->detector();
 } catch (MimeTypeException $exception) {
-    echo $exception->getMessage():
+    echo $exception->getMessage();
 }
 ```
 
