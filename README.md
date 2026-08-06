@@ -40,11 +40,15 @@ composer require moudarir/mime-detector
 ## Basic Usage
 
 ```php
+use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 use Moudarir\MimeDetector\MimeType;
 
-$result = MimeType::detect('/path/to/file.pdf');
-
-echo $result->mimeValue();
+try {
+    $result = MimeType::detect('/path/to/file.pdf');
+    echo $result->mimeValue();
+} catch (MimeTypeException $exception) {
+    echo $exception->getMessage():
+}
 ```
 
 Output:
@@ -214,13 +218,17 @@ Generic text files are handled by PHP FileInfo when no specialized format is det
 Detecting a DOCX file:
 
 ```php
+use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 use Moudarir\MimeDetector\MimeType;
 
-$result = MimeType::detect('/path/to/document.docx');
-
-echo $result->mimeValue();
-echo PHP_EOL;
-echo $result->detector();
+try {
+    $result = MimeType::detect('/path/to/file.pdf');
+    echo $result->mimeValue();
+    echo PHP_EOL;
+    echo $result->detector();
+} catch (MimeTypeException $exception) {
+    echo $exception->getMessage():
+}
 ```
 
 Output:
