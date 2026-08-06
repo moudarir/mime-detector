@@ -1,0 +1,23 @@
+{
+  "name": "moudarir/mime-type",
+  "description": "Simple and expressive detector for mime type.",
+  "version": "1.0.0",
+  "type": "library",
+  "homepage": "https://github.com/moudarir/mime-type",
+  "license": "MIT",
+  "keywords": ["mime type", "detection"],
+  "authors": [
+    {
+      "name": "Abdessamad MOUDARIR",
+      "email": "amoudarir@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.4 <9.0"
+  },
+  "autoload": {
+    "psr-4" : {
+      "Moudarir\\MimeType\\" : "src/"
+    }
+  }
+}
