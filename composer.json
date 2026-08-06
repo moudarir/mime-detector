@@ -4,15 +4,29 @@
   "type": "library",
   "homepage": "https://github.com/moudarir/mime-detector",
   "license": "MIT",
-  "keywords": ["mime type", "detection"],
+  "keywords": [
+    "mime",
+    "mime-type",
+    "detector",
+    "file",
+    "filetype",
+    "magic-number",
+    "php"
+  ],
   "authors": [
     {
       "name": "Abdessamad MOUDARIR",
       "email": "amoudarir@gmail.com"
     }
   ],
+  "support": {
+    "issues": "https://github.com/moudarir/mime-detector/issues",
+    "source": "https://github.com/moudarir/mime-detector"
+  },
   "require": {
-    "php": ">=8.4 <9.0"
+    "php": ">=8.4 <9.0",
+    "ext-fileinfo": "*",
+    "ext-zip": "*"
   },
   "autoload": {
     "psr-4" : {
