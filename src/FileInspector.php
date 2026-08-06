@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Moudarir\MimeType;
+namespace Moudarir\MimeDetector;
 
 use finfo;
-use Moudarir\MimeType\Exceptions\MimeTypeException;
+use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 
 final class FileInspector
 {

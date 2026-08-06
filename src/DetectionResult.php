@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Moudarir\MimeType;
+namespace Moudarir\MimeDetector;
 
-use Moudarir\MimeType\Enum\EnumMimeType;
+use Moudarir\MimeDetector\Enum\EnumMimeType;
 
 final readonly class DetectionResult
 {

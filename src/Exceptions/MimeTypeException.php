@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Moudarir\MimeType\Exceptions;
+namespace Moudarir\MimeDetector\Exceptions;
 
 use Exception;
 

@@ -1,9 +1,9 @@
 {
-  "name": "moudarir/mime-type",
-  "description": "Simple and expressive detector for mime type.",
+  "name": "moudarir/mime-detector",
+  "description": "A PHP library for detecting the real MIME type of files by analyzing their content.",
   "version": "1.0.0",
   "type": "library",
-  "homepage": "https://github.com/moudarir/mime-type",
+  "homepage": "https://github.com/moudarir/mime-detector",
   "license": "MIT",
   "keywords": ["mime type", "detection"],
   "authors": [
@@ -17,7 +17,7 @@
   },
   "autoload": {
     "psr-4" : {
-      "Moudarir\\MimeType\\" : "src/"
+      "Moudarir\\MimeDetector\\" : "src/"
     }
   }
 }

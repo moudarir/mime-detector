@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Moudarir\MimeType;
+namespace Moudarir\MimeDetector;
 
-use Moudarir\MimeType\Detector\FileInfoMimeDetector;
-use Moudarir\MimeType\Detector\MagicNumberMimeDetector;
-use Moudarir\MimeType\Detector\TextDetector;
-use Moudarir\MimeType\Detector\ZipMimeDetector;
-use Moudarir\MimeType\Enum\EnumMimeType;
-use Moudarir\MimeType\Exceptions\MimeTypeException;
+use Moudarir\MimeDetector\Detector\FileInfoMimeDetector;
+use Moudarir\MimeDetector\Detector\MagicNumberMimeDetector;
+use Moudarir\MimeDetector\Detector\TextDetector;
+use Moudarir\MimeDetector\Detector\ZipMimeDetector;
+use Moudarir\MimeDetector\Enum\EnumMimeType;
+use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 
 /**
  * Point d'entrée principal de détection MIME.

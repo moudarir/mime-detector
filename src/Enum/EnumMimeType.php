@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Moudarir\MimeType\Enum;
+namespace Moudarir\MimeDetector\Enum;
 
 enum EnumMimeType: string
 {

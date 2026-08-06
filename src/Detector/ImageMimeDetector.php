@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Moudarir\MimeType\Detector;
+namespace Moudarir\MimeDetector\Detector;
 
-use Moudarir\MimeType\DetectionResult;
-use Moudarir\MimeType\Enum\EnumMimeType;
-use Moudarir\MimeType\FileInspector;
+use Moudarir\MimeDetector\DetectionResult;
+use Moudarir\MimeDetector\Enum\EnumMimeType;
+use Moudarir\MimeDetector\FileInspector;
 
 /**
  * @internal

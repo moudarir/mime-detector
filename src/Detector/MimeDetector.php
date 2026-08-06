@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Moudarir\MimeType\Detector;
+namespace Moudarir\MimeDetector\Detector;
 
-use Moudarir\MimeType\DetectionResult;
-use Moudarir\MimeType\FileInspector;
+use Moudarir\MimeDetector\DetectionResult;
+use Moudarir\MimeDetector\FileInspector;
 
 interface MimeDetector
 {
