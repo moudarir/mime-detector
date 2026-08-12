@@ -11,21 +11,18 @@ use Moudarir\MimeDetector\Detector\ZipMimeDetector;
 use Moudarir\MimeDetector\Enum\EnumMimeType;
 use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 
-/**
- * Point d'entrée principal de détection MIME.
- */
 final class MimeType
 {
 
     /**
      * @throws MimeTypeException
      */
-    public static function detect(string $filepath): ?DetectionResult
+    public static function detect(string $filepath): DetectionResult
     {
         $inspector = new FileInspector($filepath);
 
-        return ZipMimeDetector::detect($inspector)
-            ?? MagicNumberMimeDetector::detect($inspector)
+        return MagicNumberMimeDetector::detect($inspector)
+            ?? ZipMimeDetector::detect($inspector)
             ?? TextDetector::detect($inspector)
             ?? FileInfoMimeDetector::detect($inspector)
             ?? new DetectionResult(EnumMimeType::OCTET_STREAM, 'DefaultFallback');

@@ -13,7 +13,6 @@ Unlike extension-based detection, this library relies on multiple detection stra
 
 The goal is to provide a reliable MIME type detection based on the actual file content.
 
----
 
 ## Requirements
 
@@ -21,11 +20,6 @@ The goal is to provide a reliable MIME type detection based on the actual file c
 * `fileinfo` extension
 * `zip` extension for ZIP container analysis
 
-Optional:
-
-* `exif` extension for additional image format detection.
-
----
 
 ## Installation
 
@@ -35,7 +29,6 @@ Install the package using Composer:
 composer require moudarir/mime-detector
 ```
 
----
 
 ## Basic Usage
 
@@ -69,16 +62,15 @@ Example output:
 Moudarir\MimeDetector\Detector\MagicNumberMimeDetector
 ```
 
----
 
 ## Detection Process
 
 The detection pipeline follows a strict order:
 
 ```text
-ZIP Container
-      ↓
 Magic Number Detection
+      ↓
+ZIP Container
       ↓
 Text Detection
       ↓

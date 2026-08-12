@@ -20,14 +20,6 @@ final readonly class MagicNumberMimeDetector implements MimeDetector
      */
     public static function detect(FileInspector $inspector): ?DetectionResult
     {
-        $result = ImageMimeDetector::detect($inspector)
-            ?? RiffDetector::detect($inspector)
-            ?? IsoBaseMediaDetector::detect($inspector);
-
-        if ($result !== null) {
-            return $result;
-        }
-
         $mimeType = match (true) {
             $inspector->startsWithHex('25504446') => EnumMimeType::PDF,
             $inspector->startsWithHex('7F454C46') => EnumMimeType::ELF,
@@ -39,10 +31,12 @@ final readonly class MagicNumberMimeDetector implements MimeDetector
             default => null,
         };
 
-        if ($mimeType === null) {
-            return null;
+        if ($mimeType !== null) {
+            return new DetectionResult($mimeType, self::class);
         }
 
-        return new DetectionResult($mimeType, self::class);
+        return riffDetector::detect($inspector)
+            ?? IsoBaseMediaDetector::detect($inspector)
+            ?? ImageMimeDetector::detect($inspector);
     }
 }

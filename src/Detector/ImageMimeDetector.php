@@ -6,6 +6,7 @@ namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Enum\EnumMimeType;
+use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 use Moudarir\MimeDetector\FileInspector;
 
 /**
@@ -14,33 +15,23 @@ use Moudarir\MimeDetector\FileInspector;
 final class ImageMimeDetector implements MimeDetector
 {
 
+    /**
+     * @throws MimeTypeException
+     */
     public static function detect(FileInspector $inspector): ?DetectionResult
     {
-        if (!function_exists('exif_imagetype')) {
-            return null;
-        }
-
-        if (($imageType = @exif_imagetype($inspector->path())) === false) {
-            return null;
-        }
-
-        $mimeType = match ($imageType) {
-            IMAGETYPE_GIF  => EnumMimeType::GIF,
-            IMAGETYPE_JPEG => EnumMimeType::JPEG,
-            IMAGETYPE_PNG  => EnumMimeType::PNG,
-            IMAGETYPE_BMP  => EnumMimeType::BMP,
-            IMAGETYPE_TIFF_II,
-            IMAGETYPE_TIFF_MM => EnumMimeType::TIFF,
-            IMAGETYPE_WEBP => EnumMimeType::WEBP,
-            IMAGETYPE_AVIF => EnumMimeType::AVIF,
-            IMAGETYPE_ICO => EnumMimeType::ICO,
+        $mimeType = match (true) {
+            $inspector->startsWithHex('47494638') => EnumMimeType::GIF,
+            $inspector->startsWithHex('FFD8FF') => EnumMimeType::JPEG,
+            $inspector->startsWithHex('89504E470D0A1A0A') => EnumMimeType::PNG,
+            $inspector->startsWithHex('424D') => EnumMimeType::BMP,
+            $inspector->startsWithHex('49492A00', '4D4D002A') => EnumMimeType::TIFF,
+            $inspector->startsWithHex('00000100') => EnumMimeType::ICO,
             default => null,
         };
 
-        if ($mimeType === null) {
-            return null;
-        }
-
-        return new DetectionResult($mimeType, self::class);
+        return $mimeType !== null
+            ? new DetectionResult($mimeType, self::class)
+            : null;
     }
 }
