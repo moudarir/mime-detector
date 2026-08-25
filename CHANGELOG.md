@@ -1,6 +1,13 @@
 # Changelog
 
 
+## [1.1.1] - 2026-08-25
+
+### Fixed
+
+- Rename call from `riffDetector::detect($inspector)` to `RiffDetector::detect($inspector)`.
+
+
 ## [1.1.0] - 2026-08-12
 
 ### Changed

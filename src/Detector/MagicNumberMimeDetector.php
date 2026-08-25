@@ -35,7 +35,7 @@ final readonly class MagicNumberMimeDetector implements MimeDetector
             return new DetectionResult($mimeType, self::class);
         }
 
-        return riffDetector::detect($inspector)
+        return RiffDetector::detect($inspector)
             ?? IsoBaseMediaDetector::detect($inspector)
             ?? ImageMimeDetector::detect($inspector);
     }
