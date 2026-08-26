@@ -32,5 +32,18 @@
     "psr-4" : {
       "Moudarir\\MimeDetector\\" : "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Moudarir\\MimeDetector\\Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^13.0"
+  },
+  "scripts": {
+    "server-start": "bash public/server-start.sh",
+    "server-stop": "bash public/server-stop.sh",
+    "test:unit": "phpunit tests/Unit"
   }
 }
