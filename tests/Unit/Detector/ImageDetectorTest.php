@@ -6,6 +6,7 @@ namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Detector\ImageDetector;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\Test;
@@ -46,7 +47,7 @@ final class ImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::GIF, $result->mimeType());
         self::assertSame(MimeType::GIF->value, $result->value());
-        self::assertSame(ImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::IMAGE, $result->detector());
     }
 
     #[Test]
@@ -61,7 +62,7 @@ final class ImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::JPEG, $result->mimeType());
         self::assertSame(MimeType::JPEG->value, $result->value());
-        self::assertSame(ImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::IMAGE, $result->detector());
     }
 
     #[Test]
@@ -76,7 +77,7 @@ final class ImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::PNG, $result->mimeType());
         self::assertSame(MimeType::PNG->value, $result->value());
-        self::assertSame(ImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::IMAGE, $result->detector());
     }
 
     #[Test]
@@ -91,7 +92,7 @@ final class ImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::BMP, $result->mimeType());
         self::assertSame(MimeType::BMP->value, $result->value());
-        self::assertSame(ImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::IMAGE, $result->detector());
     }
 
     #[Test]
@@ -106,7 +107,7 @@ final class ImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::TIFF, $result->mimeType());
         self::assertSame(MimeType::TIFF->value, $result->value());
-        self::assertSame(ImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::IMAGE, $result->detector());
     }
 
     #[Test]
@@ -121,7 +122,7 @@ final class ImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::TIFF, $result->mimeType());
         self::assertSame(MimeType::TIFF->value, $result->value());
-        self::assertSame(ImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::IMAGE, $result->detector());
     }
 
     #[Test]
@@ -136,7 +137,7 @@ final class ImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::ICO, $result->mimeType());
         self::assertSame(MimeType::ICO->value, $result->value());
-        self::assertSame(ImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::IMAGE, $result->detector());
     }
 
     #[Test]

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
 use Moudarir\MimeDetector\FileResource;
 
 /**
@@ -14,6 +16,9 @@ use Moudarir\MimeDetector\FileResource;
 final readonly class MagicNumberDetector implements MimeDetector
 {
 
+    /**
+     * @throws MimeDetectorException
+     */
     public static function detect(FileResource $inspector): ?DetectionResult
     {
         $mimeType = match (true) {
@@ -28,7 +33,7 @@ final readonly class MagicNumberDetector implements MimeDetector
         };
 
         if ($mimeType !== null) {
-            return DetectionResult::create($inspector, $mimeType, self::class);
+            return DetectionResult::create($inspector, $mimeType, DetectorSource::MAGIC_NUMBER);
         }
 
         return RiffDetector::detect($inspector)

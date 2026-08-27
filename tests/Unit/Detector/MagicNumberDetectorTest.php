@@ -10,6 +10,7 @@ use Moudarir\MimeDetector\Detector\ImageDetector;
 use Moudarir\MimeDetector\Detector\IsoBaseMediaDetector;
 use Moudarir\MimeDetector\Detector\MagicNumberDetector;
 use Moudarir\MimeDetector\Detector\RiffDetector;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -57,7 +58,7 @@ final class MagicNumberDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame($expectedMimeType, $result->mimeType());
         self::assertSame($expectedMimeType->value, $result->value());
-        self::assertSame(MagicNumberDetector::class, $result->detector());
+        self::assertSame(DetectorSource::MAGIC_NUMBER, $result->detector());
     }
 
     /**
@@ -91,7 +92,7 @@ final class MagicNumberDetectorTest extends TestCase
 
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::WEBP, $result->mimeType());
-        self::assertSame(RiffDetector::class, $result->detector());
+        self::assertSame(DetectorSource::RIFF, $result->detector());
     }
 
     #[Test]
@@ -108,7 +109,7 @@ final class MagicNumberDetectorTest extends TestCase
 
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::PNG, $result->mimeType());
-        self::assertSame(ImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::IMAGE, $result->detector());
     }
 
     #[Test]
@@ -125,7 +126,7 @@ final class MagicNumberDetectorTest extends TestCase
 
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::MP4, $result->mimeType());
-        self::assertSame(IsoBaseMediaDetector::class, $result->detector());
+        self::assertSame(DetectorSource::ISO_BASE_MEDIA, $result->detector());
     }
 
     #[Test]
@@ -142,7 +143,7 @@ final class MagicNumberDetectorTest extends TestCase
 
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::ISO, $result->mimeType());
-        self::assertSame(DiskImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::DISK_IMAGE, $result->detector());
     }
 
     #[Test]

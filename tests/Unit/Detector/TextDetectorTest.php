@@ -6,6 +6,7 @@ namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Detector\TextDetector;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -48,7 +49,7 @@ final class TextDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame($expectedMimeType, $result->mimeType());
         self::assertSame($expectedMimeType->value, $result->value());
-        self::assertSame(TextDetector::class, $result->detector());
+        self::assertSame(DetectorSource::TEXT, $result->detector());
     }
 
     /**

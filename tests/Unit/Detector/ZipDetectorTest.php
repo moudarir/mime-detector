@@ -6,6 +6,7 @@ namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Detector\ZipDetector;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -311,6 +312,6 @@ final class ZipDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame($expectedMimeType, $result->mimeType());
         self::assertSame($expectedMimeType->value, $result->value());
-        self::assertSame(ZipDetector::class, $result->detector());
+        self::assertSame(DetectorSource::ZIP, $result->detector());
     }
 }

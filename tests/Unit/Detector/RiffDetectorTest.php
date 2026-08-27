@@ -6,6 +6,7 @@ namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Detector\RiffDetector;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\Test;
@@ -49,7 +50,7 @@ final class RiffDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::WEBP, $result->mimeType());
         self::assertSame(MimeType::WEBP->value, $result->value());
-        self::assertSame(RiffDetector::class, $result->detector());
+        self::assertSame(DetectorSource::RIFF, $result->detector());
     }
 
     #[Test]
@@ -67,7 +68,7 @@ final class RiffDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::WAV, $result->mimeType());
         self::assertSame(MimeType::WAV->value, $result->value());
-        self::assertSame(RiffDetector::class, $result->detector());
+        self::assertSame(DetectorSource::RIFF, $result->detector());
     }
 
     #[Test]
@@ -85,7 +86,7 @@ final class RiffDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::AVI, $result->mimeType());
         self::assertSame(MimeType::AVI->value, $result->value());
-        self::assertSame(RiffDetector::class, $result->detector());
+        self::assertSame(DetectorSource::RIFF, $result->detector());
     }
 
     #[Test]

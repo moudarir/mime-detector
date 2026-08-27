@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Tests\Unit;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Detector\FileInfoDetector;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\Test;
@@ -61,10 +61,7 @@ final class DetectionResultTest extends TestCase
     {
         $result = $this->createResult(MimeType::PDF);
 
-        self::assertSame(
-            FileInfoDetector::class,
-            $result->detector()
-        );
+        self::assertSame(DetectorSource::FILE_INFO, $result->detector());
     }
 
     #[Test]
@@ -123,7 +120,7 @@ final class DetectionResultTest extends TestCase
         return DetectionResult::create(
             FileResource::create($this->filepath),
             $mimeType,
-            FileInfoDetector::class
+            DetectorSource::FILE_INFO
         );
     }
 }

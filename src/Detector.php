@@ -8,6 +8,7 @@ use Moudarir\MimeDetector\Detector\FileInfoDetector;
 use Moudarir\MimeDetector\Detector\MagicNumberDetector;
 use Moudarir\MimeDetector\Detector\TextDetector;
 use Moudarir\MimeDetector\Detector\ZipDetector;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
 
@@ -28,7 +29,7 @@ final class Detector
             ?? DetectionResult::create(
                 $inspector,
                 MimeType::OCTET_STREAM,
-                'DefaultFallback'
+                DetectorSource::FALLBACK
             );
     }
 }

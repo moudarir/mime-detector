@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Moudarir\MimeDetector;
 
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 
 final readonly class DetectionResult
 {
 
     private function __construct(
-        private MimeType $mimeType,
-        private string   $detector,
-        private ?int     $filesize,
-        private array    $pathInfo,
+        private MimeType       $mimeType,
+        private DetectorSource $detector,
+        private ?int           $filesize,
+        private array          $pathInfo,
     )
     {
     }
 
-    public static function create(FileResource $inspector, MimeType $mimeType, string $detector): self
+    public static function create(FileResource $inspector, MimeType $mimeType, DetectorSource $detector): self
     {
         $info = pathinfo($inspector->path());
 
@@ -43,7 +44,7 @@ final readonly class DetectionResult
         return $this->mimeType;
     }
 
-    public function detector(): string
+    public function detector(): DetectorSource
     {
         return $this->detector;
     }
@@ -51,6 +52,11 @@ final readonly class DetectionResult
     public function value(): string
     {
         return $this->mimeType->value;
+    }
+
+    public function detectorValue(): string
+    {
+        return $this->detector->value;
     }
 
     public function filesize(): ?int

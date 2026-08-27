@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 
@@ -31,6 +32,6 @@ final class RiffDetector implements MimeDetector
             return null;
         }
 
-        return DetectionResult::create($inspector, $mimeType, self::class);
+        return DetectionResult::create($inspector, $mimeType, DetectorSource::RIFF);
     }
 }

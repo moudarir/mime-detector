@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Tests\Unit;
 
 use Moudarir\MimeDetector\DetectionResult;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
 use Moudarir\MimeDetector\Detector;
@@ -48,7 +49,7 @@ final class DetectorTest extends TestCase
         self::assertDetectionResult(
             $result,
             MimeType::PDF,
-            'Moudarir\\MimeDetector\\Detector\\MagicNumberDetector'
+            DetectorSource::MAGIC_NUMBER
         );
     }
 
@@ -72,7 +73,7 @@ final class DetectorTest extends TestCase
         self::assertDetectionResult(
             $result,
             MimeType::ZIP,
-            'Moudarir\\MimeDetector\\Detector\\ZipDetector'
+            DetectorSource::ZIP
         );
     }
 
@@ -89,7 +90,7 @@ final class DetectorTest extends TestCase
         self::assertDetectionResult(
             $result,
             MimeType::TEXT_PLAIN,
-            'Moudarir\\MimeDetector\\Detector\\FileInfoDetector'
+            DetectorSource::FILE_INFO
         );
     }
 
@@ -106,7 +107,7 @@ final class DetectorTest extends TestCase
         self::assertDetectionResult(
             $result,
             MimeType::OCTET_STREAM,
-            'Moudarir\\MimeDetector\\Detector\\FileInfoDetector'
+            DetectorSource::FILE_INFO
         );
     }
 
@@ -123,7 +124,7 @@ final class DetectorTest extends TestCase
         self::assertDetectionResult(
             $result,
             MimeType::JSON,
-            'Moudarir\\MimeDetector\\Detector\\TextDetector'
+            DetectorSource::TEXT
         );
     }
 
@@ -140,7 +141,7 @@ final class DetectorTest extends TestCase
     private static function assertDetectionResult(
         DetectionResult $result,
         MimeType        $expectedMimeType,
-        string          $expectedDetector
+        DetectorSource  $expectedDetector
     ): void {
         self::assertSame($expectedMimeType, $result->mimeType());
         self::assertSame($expectedMimeType->value, $result->value());

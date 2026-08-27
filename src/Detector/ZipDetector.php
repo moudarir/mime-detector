@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 use ZipArchive;
@@ -41,7 +42,7 @@ final class ZipDetector implements MimeDetector
                 ?? self::detectJar($entries)
                 ?? MimeType::ZIP;
 
-            return DetectionResult::create($inspector, $mimeType, self::class);
+            return DetectionResult::create($inspector, $mimeType, DetectorSource::ZIP);
         } finally {
             $zip->close();
         }

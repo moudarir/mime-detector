@@ -6,6 +6,7 @@ namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Detector\DiskImageDetector;
+use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\Test;
@@ -47,7 +48,7 @@ final class DiskImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::ISO, $result->mimeType());
         self::assertSame(MimeType::ISO->value, $result->value());
-        self::assertSame(DiskImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::DISK_IMAGE, $result->detector());
     }
 
     #[Test]
@@ -102,7 +103,7 @@ final class DiskImageDetectorTest extends TestCase
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame(MimeType::DMG, $result->mimeType());
         self::assertSame(MimeType::DMG->value, $result->value());
-        self::assertSame(DiskImageDetector::class, $result->detector());
+        self::assertSame(DetectorSource::DISK_IMAGE, $result->detector());
     }
 
     #[Test]
