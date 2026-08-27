@@ -6,16 +6,12 @@ namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 use Moudarir\MimeDetector\FileInspector;
 use ZipArchive;
 
 final class ZipMimeDetector implements MimeDetector
 {
 
-    /**
-     * @throws MimeTypeException
-     */
     public static function detect(FileInspector $inspector): ?DetectionResult
     {
         /**
@@ -45,7 +41,7 @@ final class ZipMimeDetector implements MimeDetector
                 ?? self::detectJar($entries)
                 ?? EnumMimeType::ZIP;
 
-            return new DetectionResult($mimeType, self::class);
+            return DetectionResult::create($inspector, $mimeType, self::class);
         } finally {
             $zip->close();
         }

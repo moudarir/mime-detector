@@ -45,7 +45,7 @@ final class TextDetector implements MimeDetector
             return null;
         }
 
-        return new DetectionResult($mimeType, self::class);
+        return DetectionResult::create($inspector, $mimeType, self::class);
     }
 
     private static function isBinary(string $content): bool

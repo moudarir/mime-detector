@@ -19,12 +19,16 @@ final class MimeType
      */
     public static function detect(string $filepath): DetectionResult
     {
-        $inspector = new FileInspector($filepath);
+        $inspector = FileInspector::create($filepath);
 
         return MagicNumberMimeDetector::detect($inspector)
             ?? ZipMimeDetector::detect($inspector)
             ?? TextDetector::detect($inspector)
             ?? FileInfoMimeDetector::detect($inspector)
-            ?? new DetectionResult(EnumMimeType::OCTET_STREAM, 'DefaultFallback');
+            ?? DetectionResult::create(
+                $inspector,
+                EnumMimeType::OCTET_STREAM,
+                'DefaultFallback'
+            );
     }
 }

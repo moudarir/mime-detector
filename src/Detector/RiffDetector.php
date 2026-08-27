@@ -6,7 +6,6 @@ namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 use Moudarir\MimeDetector\FileInspector;
 
 /**
@@ -15,9 +14,6 @@ use Moudarir\MimeDetector\FileInspector;
 final class RiffDetector implements MimeDetector
 {
 
-    /**
-     * @throws MimeTypeException
-     */
     public static function detect(FileInspector $inspector): ?DetectionResult
     {
         if (($fourCc = $inspector->riffType()) === null) {
@@ -35,6 +31,6 @@ final class RiffDetector implements MimeDetector
             return null;
         }
 
-        return new DetectionResult($mimeType, self::class);
+        return DetectionResult::create($inspector, $mimeType, self::class);
     }
 }

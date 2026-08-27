@@ -6,7 +6,6 @@ namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 use Moudarir\MimeDetector\FileInspector;
 
 /**
@@ -15,9 +14,6 @@ use Moudarir\MimeDetector\FileInspector;
 final class IsoBaseMediaDetector implements MimeDetector
 {
 
-    /**
-     * @throws MimeTypeException
-     */
     public static function detect(FileInspector $inspector): ?DetectionResult
     {
         if (($brand = $inspector->isoBaseMediaBrand()) === null) {
@@ -76,6 +72,6 @@ final class IsoBaseMediaDetector implements MimeDetector
             return null;
         }
 
-        return new DetectionResult($mimeType, self::class);
+        return DetectionResult::create($inspector, $mimeType, self::class);
     }
 }

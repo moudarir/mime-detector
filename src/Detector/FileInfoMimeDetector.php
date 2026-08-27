@@ -24,7 +24,7 @@ final class FileInfoMimeDetector implements MimeDetector
             return null;
         }
 
-        return new DetectionResult($mimeType, self::class);
+        return DetectionResult::create($inspector, $mimeType, self::class);
     }
 
     private static function mapMimeType(string $mime): ?EnumMimeType

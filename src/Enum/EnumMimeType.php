@@ -100,6 +100,12 @@ enum EnumMimeType: string
     case SQL = 'application/sql';
     case TSV = 'text/tab-separated-values';
 
+    /*
+     * Disk images
+     */
+    case ISO = 'application/x-iso9660-image';
+    case DMG = 'application/x-apple-diskimage';
+
     case OCTET_STREAM = 'application/octet-stream';
 
     public function isImage(): bool

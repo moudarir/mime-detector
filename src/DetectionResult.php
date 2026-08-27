@@ -9,8 +9,33 @@ use Moudarir\MimeDetector\Enum\EnumMimeType;
 final readonly class DetectionResult
 {
 
-    public function __construct(private EnumMimeType $mimeType, private string $detector)
+    private function __construct(
+        private EnumMimeType $mimeType,
+        private string $detector,
+        private ?int $filesize,
+        private array $pathInfo,
+    )
     {
+    }
+
+    public static function create(FileInspector $inspector, EnumMimeType $mimeType, string $detector): self
+    {
+        $info = pathinfo($inspector->path());
+
+        if (!array_key_exists('extension', $info)) {
+            $info['extension'] = '';
+        }
+
+        if (!array_key_exists('filename', $info)) {
+            $info['filename'] = '';
+        }
+
+        return new self(
+            $mimeType,
+            $detector,
+            $inspector->filesize(),
+            $info
+        );
     }
 
     public function mimeType(): EnumMimeType
@@ -26,5 +51,43 @@ final readonly class DetectionResult
     public function value(): string
     {
         return $this->mimeType->value;
+    }
+
+    public function filesize(): ?int
+    {
+        return $this->filesize;
+    }
+
+    public function dirname(): string
+    {
+        return $this->pathInfo['dirname'];
+    }
+
+    public function basename(): string
+    {
+        return $this->pathInfo['basename'];
+    }
+
+    public function filename(): string
+    {
+        return $this->pathInfo['filename'];
+    }
+
+    public function extension(): string
+    {
+        return $this->pathInfo['extension'];
+    }
+
+    /**
+     * @return array{
+     *     dirname: string,
+     *     basename: string,
+     *     extension: string,
+     *     filename: string
+     * }
+     */
+    public function pathInfo(): array
+    {
+        return $this->pathInfo;
     }
 }

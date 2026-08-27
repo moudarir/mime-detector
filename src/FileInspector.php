@@ -14,16 +14,28 @@ final class FileInspector
 
     private static ?finfo $finfo = null;
 
-    private string $header;
+    private ?int $filesize;
+
+    private bool $filesizeResolved = false;
 
     private string $hexHeader;
 
     /**
+     */
+    private function __construct(private readonly string $path, private readonly string $header)
+    {
+    }
+
+    /**
      * @throws MimeTypeException
      */
-    public function __construct(private readonly string $path)
+    public static function create(string $path): self
     {
-        $this->validate();
+        if (!is_file($path) || !is_readable($path)) {
+            throw MimeTypeException::fileNotExistOrUnreadable($path);
+        }
+
+        return new self($path, self::getBytes($path, self::HEADER_SIZE));
     }
 
     public function path(): string
@@ -31,39 +43,43 @@ final class FileInspector
         return $this->path;
     }
 
-    /**
-     * Retourne les premiers octets du fichier.
-     * @throws MimeTypeException
-     */
-    public function header(): string
+    public function filesize(): ?int
     {
-        if (isset($this->header)) {
-            return $this->header;
+        if ($this->filesizeResolved) {
+            return $this->filesize;
         }
 
-        if (($handle = fopen($this->path, 'rb')) === false) {
-            throw MimeTypeException::unableOpenFile($this->path);
-        }
+        $size = @filesize($this->path);
+        $this->filesize = $size !== false ? $size : null;
+        $this->filesizeResolved = true;
 
-        try {
-            if (($header = fread($handle, self::HEADER_SIZE)) === false) {
-                throw MimeTypeException::unableReadFileHeader($this->path);
-            }
-
-            $this->header = $header;
-            return $this->header;
-        } finally {
-            fclose($handle);
-        }
+        return $this->filesize;
     }
 
     /**
-     * Retourne le header en représentation hexadécimale.
-     * @throws MimeTypeException
+     * Returns the header in hexadecimal representation.
      */
     public function hexHeader(): string
     {
-        return $this->hexHeader ??= strtoupper(bin2hex($this->header()));
+        return $this->hexHeader ??= self::toHex($this->header);
+    }
+
+    /**
+     * @throws MimeTypeException
+     */
+    public function readHex(int $offset, int $length): ?string
+    {
+        if ($offset < 0 || $length < 0) {
+            return null;
+        }
+
+        $bytes = self::getBytes($this->path, $length, $offset);
+
+        if (strlen($bytes) !== $length) {
+            return null;
+        }
+
+        return self::toHex($bytes);
     }
 
     /**
@@ -79,8 +95,7 @@ final class FileInspector
     }
 
     /**
-     * Vérifie si le header commence par une signature hexadécimale.
-     * @throws MimeTypeException
+     * Check if the header starts with a hexadecimal signature.
      */
     public function startsWithHex(string ...$signatures): bool
     {
@@ -90,16 +105,14 @@ final class FileInspector
 
     /**
      * Return the heder brut part.
-     * @throws MimeTypeException
      */
     public function bytes(int $offset, int $length): string
     {
-        return substr($this->header(), $offset, $length);
+        return substr($this->header, $offset, $length);
     }
 
     /**
      * Return the RIFF type.
-     * @throws MimeTypeException
      */
     public function riffType(): ?string
     {
@@ -112,7 +125,6 @@ final class FileInspector
 
     /**
      * Return the brand ISO Base Media.
-     * @throws MimeTypeException
      */
     public function isoBaseMediaBrand(): ?string
     {
@@ -126,10 +138,29 @@ final class FileInspector
     /**
      * @throws MimeTypeException
      */
-    private function validate(): void
+    private static function getBytes(string $path, int $length, int $offset = 0): string
     {
-        if (!is_file($this->path) || !is_readable($this->path)) {
-            throw MimeTypeException::fileNotExistOrUnreadable($this->path);
+        if (($handle = @fopen($path, 'rb')) === false) {
+            throw MimeTypeException::unableOpenFile($path);
         }
+
+        try {
+            if (fseek($handle, $offset) !== 0) {
+                throw MimeTypeException::unableReadFileHeader($path);
+            }
+
+            if (($bytes = fread($handle, $length)) === false) {
+                throw MimeTypeException::unableReadFileHeader($path);
+            }
+
+            return $bytes;
+        } finally {
+            fclose($handle);
+        }
+    }
+
+    public static function toHex(string $content): string
+    {
+        return strtoupper(bin2hex($content));
     }
 }

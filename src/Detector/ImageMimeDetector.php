@@ -6,7 +6,6 @@ namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
 use Moudarir\MimeDetector\FileInspector;
 
 /**
@@ -15,9 +14,6 @@ use Moudarir\MimeDetector\FileInspector;
 final class ImageMimeDetector implements MimeDetector
 {
 
-    /**
-     * @throws MimeTypeException
-     */
     public static function detect(FileInspector $inspector): ?DetectionResult
     {
         $mimeType = match (true) {
@@ -31,7 +27,7 @@ final class ImageMimeDetector implements MimeDetector
         };
 
         return $mimeType !== null
-            ? new DetectionResult($mimeType, self::class)
+            ? DetectionResult::create($inspector, $mimeType, self::class)
             : null;
     }
 }
