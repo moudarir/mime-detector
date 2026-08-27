@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 
 /**
  * @internal
@@ -14,16 +14,16 @@ use Moudarir\MimeDetector\FileInspector;
 final class RiffDetector implements MimeDetector
 {
 
-    public static function detect(FileInspector $inspector): ?DetectionResult
+    public static function detect(FileResource $inspector): ?DetectionResult
     {
         if (($fourCc = $inspector->riffType()) === null) {
             return null;
         }
 
         $mimeType = match ($fourCc) {
-            'WEBP' => EnumMimeType::WEBP,
-            'WAVE' => EnumMimeType::WAV,
-            'AVI ' => EnumMimeType::AVI,
+            'WEBP' => MimeType::WEBP,
+            'WAVE' => MimeType::WAV,
+            'AVI ' => MimeType::AVI,
             default => null,
         };
 

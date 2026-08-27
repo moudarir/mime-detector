@@ -6,8 +6,8 @@ namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Detector\IsoBaseMediaDetector;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +39,7 @@ final class IsoBaseMediaDetectorTest extends TestCase
     #[DataProvider('isoBaseMediaProvider')]
     public function itDetectsIsoBaseMedia(
         string $brand,
-        EnumMimeType $expectedMimeType
+        MimeType $expectedMimeType
     ): void {
         file_put_contents(
             $this->filepath,
@@ -47,7 +47,7 @@ final class IsoBaseMediaDetectorTest extends TestCase
         );
 
         $result = IsoBaseMediaDetector::detect(
-            FileInspector::create($this->filepath)
+            FileResource::create($this->filepath)
         );
 
         self::assertInstanceOf(DetectionResult::class, $result);
@@ -57,40 +57,40 @@ final class IsoBaseMediaDetectorTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{string, EnumMimeType}>
+     * @return iterable<string, array{string, MimeType}>
      */
     public static function isoBaseMediaProvider(): iterable
     {
-        yield 'HEIF mif1' => ['mif1', EnumMimeType::HEIF];
-        yield 'HEIF msf1' => ['msf1', EnumMimeType::HEIF];
+        yield 'HEIF mif1' => ['mif1', MimeType::HEIF];
+        yield 'HEIF msf1' => ['msf1', MimeType::HEIF];
 
-        yield 'HEIC heic' => ['heic', EnumMimeType::HEIC];
-        yield 'HEIC heix' => ['heix', EnumMimeType::HEIC];
-        yield 'HEIC hevc' => ['hevc', EnumMimeType::HEIC];
-        yield 'HEIC hevx' => ['hevx', EnumMimeType::HEIC];
+        yield 'HEIC heic' => ['heic', MimeType::HEIC];
+        yield 'HEIC heix' => ['heix', MimeType::HEIC];
+        yield 'HEIC hevc' => ['hevc', MimeType::HEIC];
+        yield 'HEIC hevx' => ['hevx', MimeType::HEIC];
 
-        yield 'AVIF' => ['avif', EnumMimeType::AVIF];
+        yield 'AVIF' => ['avif', MimeType::AVIF];
 
-        yield 'MP4 isom' => ['isom', EnumMimeType::MP4];
-        yield 'MP4 iso2' => ['iso2', EnumMimeType::MP4];
-        yield 'MP4 iso3' => ['iso3', EnumMimeType::MP4];
-        yield 'MP4 iso4' => ['iso4', EnumMimeType::MP4];
-        yield 'MP4 iso5' => ['iso5', EnumMimeType::MP4];
-        yield 'MP4 iso6' => ['iso6', EnumMimeType::MP4];
-        yield 'MP4 mp41' => ['mp41', EnumMimeType::MP4];
-        yield 'MP4 mp42' => ['mp42', EnumMimeType::MP4];
-        yield 'MP4 avc1' => ['avc1', EnumMimeType::MP4];
-        yield 'MP4 dash' => ['dash', EnumMimeType::MP4];
+        yield 'MP4 isom' => ['isom', MimeType::MP4];
+        yield 'MP4 iso2' => ['iso2', MimeType::MP4];
+        yield 'MP4 iso3' => ['iso3', MimeType::MP4];
+        yield 'MP4 iso4' => ['iso4', MimeType::MP4];
+        yield 'MP4 iso5' => ['iso5', MimeType::MP4];
+        yield 'MP4 iso6' => ['iso6', MimeType::MP4];
+        yield 'MP4 mp41' => ['mp41', MimeType::MP4];
+        yield 'MP4 mp42' => ['mp42', MimeType::MP4];
+        yield 'MP4 avc1' => ['avc1', MimeType::MP4];
+        yield 'MP4 dash' => ['dash', MimeType::MP4];
 
-        yield 'M4A' => ["M4A ", EnumMimeType::M4A];
-        yield 'M4B' => ["M4B ", EnumMimeType::M4A];
+        yield 'M4A' => ["M4A ", MimeType::M4A];
+        yield 'M4B' => ["M4B ", MimeType::M4A];
 
-        yield '3GPP 3gp4' => ['3gp4', EnumMimeType::THREE_GPP];
-        yield '3GPP 3gp5' => ['3gp5', EnumMimeType::THREE_GPP];
-        yield '3GPP 3gp6' => ['3gp6', EnumMimeType::THREE_GPP];
-        yield '3GPP 3gp7' => ['3gp7', EnumMimeType::THREE_GPP];
+        yield '3GPP 3gp4' => ['3gp4', MimeType::THREE_GPP];
+        yield '3GPP 3gp5' => ['3gp5', MimeType::THREE_GPP];
+        yield '3GPP 3gp6' => ['3gp6', MimeType::THREE_GPP];
+        yield '3GPP 3gp7' => ['3gp7', MimeType::THREE_GPP];
 
-        yield 'QuickTime' => ['qt  ', EnumMimeType::MOV];
+        yield 'QuickTime' => ['qt  ', MimeType::MOV];
     }
 
     #[Test]
@@ -102,7 +102,7 @@ final class IsoBaseMediaDetectorTest extends TestCase
         );
 
         $result = IsoBaseMediaDetector::detect(
-            FileInspector::create($this->filepath)
+            FileResource::create($this->filepath)
         );
 
         self::assertNull($result);
@@ -117,7 +117,7 @@ final class IsoBaseMediaDetectorTest extends TestCase
         );
 
         $result = IsoBaseMediaDetector::detect(
-            FileInspector::create($this->filepath)
+            FileResource::create($this->filepath)
         );
 
         self::assertNull($result);

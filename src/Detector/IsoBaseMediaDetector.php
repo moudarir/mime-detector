@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 
 /**
  * @internal
@@ -14,7 +14,7 @@ use Moudarir\MimeDetector\FileInspector;
 final class IsoBaseMediaDetector implements MimeDetector
 {
 
-    public static function detect(FileInspector $inspector): ?DetectionResult
+    public static function detect(FileResource $inspector): ?DetectionResult
     {
         if (($brand = $inspector->isoBaseMediaBrand()) === null) {
             return null;
@@ -25,14 +25,14 @@ final class IsoBaseMediaDetector implements MimeDetector
              * Images HEIF / HEIC
              */
             'mif1',
-            'msf1' => EnumMimeType::HEIF,
+            'msf1' => MimeType::HEIF,
 
             'heic',
             'heix',
             'hevc',
-            'hevx' => EnumMimeType::HEIC,
+            'hevx' => MimeType::HEIC,
 
-            'avif' => EnumMimeType::AVIF,
+            'avif' => MimeType::AVIF,
 
             /*
              * MPEG-4 vidéo
@@ -46,13 +46,13 @@ final class IsoBaseMediaDetector implements MimeDetector
             'mp41',
             'mp42',
             'avc1',
-            'dash' => EnumMimeType::MP4,
+            'dash' => MimeType::MP4,
 
             /*
              * MPEG-4 audio
              */
             'M4A ',
-            'M4B ' => EnumMimeType::M4A,
+            'M4B ' => MimeType::M4A,
 
             /*
              * 3GPP
@@ -60,10 +60,10 @@ final class IsoBaseMediaDetector implements MimeDetector
             '3gp4',
             '3gp5',
             '3gp6',
-            '3gp7' => EnumMimeType::THREE_GPP,
+            '3gp7' => MimeType::THREE_GPP,
 
             // QuickTime
-            'qt  ' => EnumMimeType::MOV,
+            'qt  ' => MimeType::MOV,
 
             default => null,
         };

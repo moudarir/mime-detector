@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Detector\ZipMimeDetector;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Detector\ZipDetector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ZipArchive;
 
-final class ZipMimeDetectorTest extends TestCase
+final class ZipDetectorTest extends TestCase
 {
 
     private string $filepath;
@@ -45,14 +45,14 @@ final class ZipMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::ZIP);
+        self::assertDetectionResult($result, MimeType::ZIP);
     }
 
     #[Test]
     #[DataProvider('officeProvider')]
     public function itDetectsOfficeDocument(
         string $entry,
-        EnumMimeType $expectedMimeType
+        MimeType $expectedMimeType
     ): void {
         $this->createZip([
             $entry => '<xml/>',
@@ -64,23 +64,23 @@ final class ZipMimeDetectorTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{string, EnumMimeType}>
+     * @return iterable<string, array{string, MimeType}>
      */
     public static function officeProvider(): iterable
     {
         yield 'DOCX' => [
             'word/document.xml',
-            EnumMimeType::DOCX,
+            MimeType::DOCX,
         ];
 
         yield 'XLSX' => [
             'xl/workbook.xml',
-            EnumMimeType::XLSX,
+            MimeType::XLSX,
         ];
 
         yield 'PPTX' => [
             'ppt/presentation.xml',
-            EnumMimeType::PPTX,
+            MimeType::PPTX,
         ];
     }
 
@@ -88,7 +88,7 @@ final class ZipMimeDetectorTest extends TestCase
     #[DataProvider('openDocumentProvider')]
     public function itDetectsOpenDocument(
         string $mimeType,
-        EnumMimeType $expectedMimeType
+        MimeType $expectedMimeType
     ): void {
         $this->createZip([
             'META-INF/manifest.xml' => '<manifest/>',
@@ -101,23 +101,23 @@ final class ZipMimeDetectorTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{string, EnumMimeType}>
+     * @return iterable<string, array{string, MimeType}>
      */
     public static function openDocumentProvider(): iterable
     {
         yield 'ODT' => [
-            EnumMimeType::ODT->value,
-            EnumMimeType::ODT,
+            MimeType::ODT->value,
+            MimeType::ODT,
         ];
 
         yield 'ODS' => [
-            EnumMimeType::ODS->value,
-            EnumMimeType::ODS,
+            MimeType::ODS->value,
+            MimeType::ODS,
         ];
 
         yield 'ODP' => [
-            EnumMimeType::ODP->value,
-            EnumMimeType::ODP,
+            MimeType::ODP->value,
+            MimeType::ODP,
         ];
     }
 
@@ -126,12 +126,12 @@ final class ZipMimeDetectorTest extends TestCase
     {
         $this->createZip([
             'META-INF/container.xml' => '<container/>',
-            'mimetype' => EnumMimeType::EPUB->value,
+            'mimetype' => MimeType::EPUB->value,
         ]);
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::EPUB);
+        self::assertDetectionResult($result, MimeType::EPUB);
     }
 
     #[Test]
@@ -144,7 +144,7 @@ final class ZipMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::APK);
+        self::assertDetectionResult($result, MimeType::APK);
     }
 
     #[Test]
@@ -156,7 +156,7 @@ final class ZipMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::JAR);
+        self::assertDetectionResult($result, MimeType::JAR);
     }
 
     #[Test]
@@ -169,7 +169,7 @@ final class ZipMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::ZIP);
+        self::assertDetectionResult($result, MimeType::ZIP);
     }
 
     #[Test]
@@ -208,7 +208,7 @@ final class ZipMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::ZIP);
+        self::assertDetectionResult($result, MimeType::ZIP);
     }
 
     #[Test]
@@ -217,36 +217,36 @@ final class ZipMimeDetectorTest extends TestCase
         $this->createZip([
             'word/document.xml' => '<xml/>',
             'META-INF/manifest.xml' => '<manifest/>',
-            'mimetype' => EnumMimeType::ODT->value,
+            'mimetype' => MimeType::ODT->value,
         ]);
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::DOCX);
+        self::assertDetectionResult($result, MimeType::DOCX);
     }
 
     #[Test]
     public function itRequiresManifestAndMimetypeForOpenDocument(): void
     {
         $this->createZip([
-            'mimetype' => EnumMimeType::ODT->value,
+            'mimetype' => MimeType::ODT->value,
         ]);
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::ZIP);
+        self::assertDetectionResult($result, MimeType::ZIP);
     }
 
     #[Test]
     public function itRequiresContainerAndMimetypeForEpub(): void
     {
         $this->createZip([
-            'mimetype' => EnumMimeType::EPUB->value,
+            'mimetype' => MimeType::EPUB->value,
         ]);
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::ZIP);
+        self::assertDetectionResult($result, MimeType::ZIP);
     }
 
     #[Test]
@@ -258,7 +258,7 @@ final class ZipMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::ZIP);
+        self::assertDetectionResult($result, MimeType::ZIP);
     }
 
     #[Test]
@@ -270,13 +270,13 @@ final class ZipMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::ZIP);
+        self::assertDetectionResult($result, MimeType::ZIP);
     }
 
     private function detect(): ?DetectionResult
     {
-        return ZipMimeDetector::detect(
-            FileInspector::create($this->filepath)
+        return ZipDetector::detect(
+            FileResource::create($this->filepath)
         );
     }
 
@@ -306,11 +306,11 @@ final class ZipMimeDetectorTest extends TestCase
 
     private static function assertDetectionResult(
         ?DetectionResult $result,
-        EnumMimeType $expectedMimeType
+        MimeType $expectedMimeType
     ): void {
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame($expectedMimeType, $result->mimeType());
         self::assertSame($expectedMimeType->value, $result->value());
-        self::assertSame(ZipMimeDetector::class, $result->detector());
+        self::assertSame(ZipDetector::class, $result->detector());
     }
 }

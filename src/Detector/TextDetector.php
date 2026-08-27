@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 
 /**
  * @internal
@@ -16,7 +16,7 @@ final class TextDetector implements MimeDetector
 
     private const int SAMPLE_SIZE = 16 * 1024;
 
-    public static function detect(FileInspector $inspector): ?DetectionResult
+    public static function detect(FileResource $inspector): ?DetectionResult
     {
         $content = @file_get_contents($inspector->path(), context: null, length: self::SAMPLE_SIZE);
 
@@ -68,94 +68,94 @@ final class TextDetector implements MimeDetector
         return false;
     }
 
-    private static function detectPhp(string $content): ?EnumMimeType
+    private static function detectPhp(string $content): ?MimeType
     {
-        return self::startsWithAny($content, '<?php', '<?=') ? EnumMimeType::PHP : null;
+        return self::startsWithAny($content, '<?php', '<?=') ? MimeType::PHP : null;
     }
 
-    private static function detectSvg(string $content): ?EnumMimeType
+    private static function detectSvg(string $content): ?MimeType
     {
         return self::containsAny($content, '<svg', 'xmlns="http://www.w3.org/2000/svg"')
-            ? EnumMimeType::SVG
+            ? MimeType::SVG
             : null;
     }
 
-    private static function detectHtml(string $content): ?EnumMimeType
+    private static function detectHtml(string $content): ?MimeType
     {
         return self::countContains(strtolower($content), '<html', '<head', '<body', '<title', '<meta', '<!doctype html') >= 2
-            ? EnumMimeType::HTML
+            ? MimeType::HTML
             : null;
     }
 
-    private static function detectJson(string $content): ?EnumMimeType
+    private static function detectJson(string $content): ?MimeType
     {
         if (!str_starts_with($content, '{') && !str_starts_with($content, '[')) {
             return null;
         }
 
         return self::countContains($content, '":', ',', '{', '}', '[', ']') >= 3
-            ? EnumMimeType::JSON
+            ? MimeType::JSON
             : null;
     }
 
-    private static function detectXml(string $content): ?EnumMimeType
+    private static function detectXml(string $content): ?MimeType
     {
         if (str_starts_with($content, '<!doctype html')) {
             return null;
         }
 
         return preg_match('/<([A-Za-z_][\w:.-]*)([\s>])/', $content) === 1
-            ? EnumMimeType::XML
+            ? MimeType::XML
             : null;
     }
 
-    private static function detectSql(string $content): ?EnumMimeType
+    private static function detectSql(string $content): ?MimeType
     {
         return self::countContains(
             strtoupper($content),
             'SELECT ', 'INSERT ', 'UPDATE ', 'DELETE ', 'CREATE TABLE', 'CREATE DATABASE', 'ALTER TABLE',
             'DROP TABLE', 'FROM ', 'WHERE ', 'VALUES ', 'ENGINE=', 'AUTO_INCREMENT') >= 2
-            ? EnumMimeType::SQL
+            ? MimeType::SQL
             : null;
     }
 
-    private static function detectJavascript(string $content): ?EnumMimeType
+    private static function detectJavascript(string $content): ?MimeType
     {
         return self::countContains($content,
             'function ', 'const ', 'let ', 'var ', '=>', 'import ', 'export ',
             'class ', 'console.', 'document.', 'window.', 'require(') >= 2
-            ? EnumMimeType::JAVASCRIPT
+            ? MimeType::JAVASCRIPT
             : null;
     }
 
-    private static function detectCss(string $content): ?EnumMimeType
+    private static function detectCss(string $content): ?MimeType
     {
         return self::containsAny($content, '@media', '@supports', '@font-face', ':root')
         || preg_match('/[.#]?[a-zA-Z_-][\w-]*\s*\{/', $content) === 1
-            ? EnumMimeType::CSS
+            ? MimeType::CSS
             : null;
     }
 
-    private static function detectYaml(string $content): ?EnumMimeType
+    private static function detectYaml(string $content): ?MimeType
     {
         return str_starts_with($content, "---")
         || preg_match('/^[a-zA-Z0-9_.-]+\s*:\s*.+$/m', $content) === 1
-            ? EnumMimeType::YAML
+            ? MimeType::YAML
             : null;
     }
 
-    private static function detectMarkdown(string $content): ?EnumMimeType
+    private static function detectMarkdown(string $content): ?MimeType
     {
         return self::countContains($content, '# ', '## ', '```', '](', '![', '> ') >= 2
-            ? EnumMimeType::MARKDOWN
+            ? MimeType::MARKDOWN
             : null;
     }
 
-    private static function detectSeparatedValues(string $content): ?EnumMimeType
+    private static function detectSeparatedValues(string $content): ?MimeType
     {
         foreach (["\t", ',', ';', '|'] as $separator) {
             if (self::hasSeparator($content, $separator)) {
-                return $separator === "\t" ? EnumMimeType::TSV : EnumMimeType::TEXT_CSV;
+                return $separator === "\t" ? MimeType::TSV : MimeType::TEXT_CSV;
             }
         }
 

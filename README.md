@@ -33,13 +33,13 @@ composer require moudarir/mime-detector
 ## Basic Usage
 
 ```php
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
-use Moudarir\MimeDetector\MimeType;
+use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
+use Moudarir\MimeDetector\Detector;
 
 try {
-    $result = MimeType::detect('/path/to/file.pdf');
+    $result = Detector::detect('/path/to/file.pdf');
     echo $result->mimeValue();
-} catch (MimeTypeException $exception) {
+} catch (MimeDetectorException $exception) {
     echo $exception->getMessage();
 }
 ```
@@ -59,7 +59,7 @@ echo $result->detector();
 Example output:
 
 ```text
-Moudarir\MimeDetector\Detector\MagicNumberMimeDetector
+Moudarir\MimeDetector\Detector\MagicNumberDetector
 ```
 
 
@@ -210,15 +210,15 @@ Generic text files are handled by PHP FileInfo when no specialized format is det
 Detecting a DOCX file:
 
 ```php
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
-use Moudarir\MimeDetector\MimeType;
+use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
+use Moudarir\MimeDetector\Detector;
 
 try {
-    $result = MimeType::detect('/path/to/file.pdf');
-    echo $result->mimeValue();
+    $result = Detector::detect('/path/to/file.pdf');
+    echo $result->value();
     echo PHP_EOL;
     echo $result->detector();
-} catch (MimeTypeException $exception) {
+} catch (MimeDetectorException $exception) {
     echo $exception->getMessage();
 }
 ```
@@ -228,7 +228,7 @@ Output:
 ```text
 application/vnd.openxmlformats-officedocument.wordprocessingml.document
 
-Moudarir\MimeDetector\Detector\ZipMimeDetector
+Moudarir\MimeDetector\Detector\ZipDetector
 ```
 
 ---

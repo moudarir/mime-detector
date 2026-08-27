@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Tests\Unit;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Detector\FileInfoMimeDetector;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Detector\FileInfoDetector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -37,10 +37,10 @@ final class DetectionResultTest extends TestCase
     #[Test]
     public function itReturnsMimeType(): void
     {
-        $result = $this->createResult(EnumMimeType::PDF);
+        $result = $this->createResult(MimeType::PDF);
 
         self::assertSame(
-            EnumMimeType::PDF,
+            MimeType::PDF,
             $result->mimeType()
         );
     }
@@ -48,10 +48,10 @@ final class DetectionResultTest extends TestCase
     #[Test]
     public function itReturnsMimeTypeValue(): void
     {
-        $result = $this->createResult(EnumMimeType::PDF);
+        $result = $this->createResult(MimeType::PDF);
 
         self::assertSame(
-            EnumMimeType::PDF->value,
+            MimeType::PDF->value,
             $result->value()
         );
     }
@@ -59,10 +59,10 @@ final class DetectionResultTest extends TestCase
     #[Test]
     public function itReturnsDetector(): void
     {
-        $result = $this->createResult(EnumMimeType::PDF);
+        $result = $this->createResult(MimeType::PDF);
 
         self::assertSame(
-            FileInfoMimeDetector::class,
+            FileInfoDetector::class,
             $result->detector()
         );
     }
@@ -74,7 +74,7 @@ final class DetectionResultTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $result = $this->createResult(EnumMimeType::PDF);
+        $result = $this->createResult(MimeType::PDF);
 
         self::assertSame(
             strlen($content),
@@ -92,7 +92,7 @@ final class DetectionResultTest extends TestCase
 
         file_put_contents($this->filepath, '%PDF-1.7');
 
-        $result = $this->createResult(EnumMimeType::PDF);
+        $result = $this->createResult(MimeType::PDF);
 
         self::assertSame(
             [
@@ -108,7 +108,7 @@ final class DetectionResultTest extends TestCase
     #[Test]
     public function itReturnsEmptyExtensionForFileWithoutExtension(): void
     {
-        $result = $this->createResult(EnumMimeType::PDF);
+        $result = $this->createResult(MimeType::PDF);
 
         $pathInfo = $result->pathInfo();
 
@@ -118,12 +118,12 @@ final class DetectionResultTest extends TestCase
         self::assertSame(basename($this->filepath), $pathInfo['filename']);
     }
 
-    private function createResult(EnumMimeType $mimeType): DetectionResult
+    private function createResult(MimeType $mimeType): DetectionResult
     {
         return DetectionResult::create(
-            FileInspector::create($this->filepath),
+            FileResource::create($this->filepath),
             $mimeType,
-            FileInfoMimeDetector::class
+            FileInfoDetector::class
         );
     }
 }

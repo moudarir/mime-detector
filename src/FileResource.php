@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector;
 
 use finfo;
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
+use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
 
-final class FileInspector
+final class FileResource
 {
 
     private const int HEADER_SIZE = 64;
@@ -27,12 +27,12 @@ final class FileInspector
     }
 
     /**
-     * @throws MimeTypeException
+     * @throws MimeDetectorException
      */
     public static function create(string $path): self
     {
         if (!is_file($path) || !is_readable($path)) {
-            throw MimeTypeException::fileNotExistOrUnreadable($path);
+            throw MimeDetectorException::fileNotExistOrUnreadable($path);
         }
 
         return new self($path, self::getBytes($path, self::HEADER_SIZE));
@@ -65,7 +65,7 @@ final class FileInspector
     }
 
     /**
-     * @throws MimeTypeException
+     * @throws MimeDetectorException
      */
     public function readHex(int $offset, int $length): ?string
     {
@@ -136,21 +136,21 @@ final class FileInspector
     }
 
     /**
-     * @throws MimeTypeException
+     * @throws MimeDetectorException
      */
     private static function getBytes(string $path, int $length, int $offset = 0): string
     {
         if (($handle = @fopen($path, 'rb')) === false) {
-            throw MimeTypeException::unableOpenFile($path);
+            throw MimeDetectorException::unableOpenFile($path);
         }
 
         try {
             if (fseek($handle, $offset) !== 0) {
-                throw MimeTypeException::unableReadFileHeader($path);
+                throw MimeDetectorException::unableReadFileHeader($path);
             }
 
             if (($bytes = fread($handle, $length)) === false) {
-                throw MimeTypeException::unableReadFileHeader($path);
+                throw MimeDetectorException::unableReadFileHeader($path);
             }
 
             return $bytes;

@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 
 /**
  * @internal
  */
-final class FileInfoMimeDetector implements MimeDetector
+final class FileInfoDetector implements MimeDetector
 {
 
-    public static function detect(FileInspector $inspector): ?DetectionResult
+    public static function detect(FileResource $inspector): ?DetectionResult
     {
         if (($mime = $inspector->fileInfoMime()) === null) {
             return null;
@@ -27,13 +27,13 @@ final class FileInfoMimeDetector implements MimeDetector
         return DetectionResult::create($inspector, $mimeType, self::class);
     }
 
-    private static function mapMimeType(string $mime): ?EnumMimeType
+    private static function mapMimeType(string $mime): ?MimeType
     {
         return match ($mime) {
             'text/x-php',
             'application/x-php',
-            'application/x-httpd-php' => EnumMimeType::PHP,
-            default => EnumMimeType::tryFrom($mime),
+            'application/x-httpd-php' => MimeType::PHP,
+            default => MimeType::tryFrom($mime),
         };
     }
 }

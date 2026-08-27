@@ -6,8 +6,8 @@ namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
 use Moudarir\MimeDetector\Detector\DiskImageDetector;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -41,12 +41,12 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertInstanceOf(DetectionResult::class, $result);
-        self::assertSame(EnumMimeType::ISO, $result->mimeType());
-        self::assertSame(EnumMimeType::ISO->value, $result->value());
+        self::assertSame(MimeType::ISO, $result->mimeType());
+        self::assertSame(MimeType::ISO->value, $result->value());
         self::assertSame(DiskImageDetector::class, $result->detector());
     }
 
@@ -57,7 +57,7 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertNull($result);
@@ -70,7 +70,7 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertNull($result);
@@ -83,7 +83,7 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertNull($result);
@@ -96,12 +96,12 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertInstanceOf(DetectionResult::class, $result);
-        self::assertSame(EnumMimeType::DMG, $result->mimeType());
-        self::assertSame(EnumMimeType::DMG->value, $result->value());
+        self::assertSame(MimeType::DMG, $result->mimeType());
+        self::assertSame(MimeType::DMG->value, $result->value());
         self::assertSame(DiskImageDetector::class, $result->detector());
     }
 
@@ -112,7 +112,7 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertNull($result);
@@ -125,7 +125,7 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertNull($result);
@@ -138,7 +138,7 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertNull($result);
@@ -151,7 +151,7 @@ final class DiskImageDetectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
         $result = DiskImageDetector::detect($inspector);
 
         self::assertNull($result);

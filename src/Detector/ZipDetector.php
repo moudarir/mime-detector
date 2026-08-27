@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 use ZipArchive;
 
-final class ZipMimeDetector implements MimeDetector
+final class ZipDetector implements MimeDetector
 {
 
-    public static function detect(FileInspector $inspector): ?DetectionResult
+    public static function detect(FileResource $inspector): ?DetectionResult
     {
         /**
          * No need to open ZIP file if missing PK signature.
@@ -39,7 +39,7 @@ final class ZipMimeDetector implements MimeDetector
                 ?? self::detectEpub($zip, $entries)
                 ?? self::detectApk($entries)
                 ?? self::detectJar($entries)
-                ?? EnumMimeType::ZIP;
+                ?? MimeType::ZIP;
 
             return DetectionResult::create($inspector, $mimeType, self::class);
         } finally {
@@ -50,18 +50,18 @@ final class ZipMimeDetector implements MimeDetector
     /**
      * @param array<string, true> $entries
      */
-    private static function detectOffice(array $entries): ?EnumMimeType
+    private static function detectOffice(array $entries): ?MimeType
     {
         if (isset($entries['word/document.xml'])) {
-            return EnumMimeType::DOCX;
+            return MimeType::DOCX;
         }
 
         if (isset($entries['xl/workbook.xml'])) {
-            return EnumMimeType::XLSX;
+            return MimeType::XLSX;
         }
 
         if (isset($entries['ppt/presentation.xml'])) {
-            return EnumMimeType::PPTX;
+            return MimeType::PPTX;
         }
 
         return null;
@@ -70,7 +70,7 @@ final class ZipMimeDetector implements MimeDetector
     /**
      * @param array<string, true> $entries
      */
-    private static function detectOpenDocument(ZipArchive $zip, array $entries): ?EnumMimeType
+    private static function detectOpenDocument(ZipArchive $zip, array $entries): ?MimeType
     {
         if (!isset($entries['META-INF/manifest.xml']) || !isset($entries['mimetype'])) {
             return null;
@@ -83,9 +83,9 @@ final class ZipMimeDetector implements MimeDetector
         }
 
         return match ($mime) {
-            EnumMimeType::ODT->value => EnumMimeType::ODT,
-            EnumMimeType::ODS->value => EnumMimeType::ODS,
-            EnumMimeType::ODP->value => EnumMimeType::ODP,
+            MimeType::ODT->value => MimeType::ODT,
+            MimeType::ODS->value => MimeType::ODS,
+            MimeType::ODP->value => MimeType::ODP,
             default => null,
         };
     }
@@ -93,7 +93,7 @@ final class ZipMimeDetector implements MimeDetector
     /**
      * @param array<string, true> $entries
      */
-    private static function detectEpub(ZipArchive $zip, array $entries): ?EnumMimeType
+    private static function detectEpub(ZipArchive $zip, array $entries): ?MimeType
     {
         if (!isset($entries['META-INF/container.xml']) || !isset($entries['mimetype'])) {
             return null;
@@ -105,16 +105,16 @@ final class ZipMimeDetector implements MimeDetector
             return null;
         }
 
-        return $mime === EnumMimeType::EPUB->value ? EnumMimeType::EPUB : null;
+        return $mime === MimeType::EPUB->value ? MimeType::EPUB : null;
     }
 
     /**
      * @param array<string, true> $entries
      */
-    private static function detectApk(array $entries): ?EnumMimeType
+    private static function detectApk(array $entries): ?MimeType
     {
         if (isset($entries['AndroidManifest.xml']) && isset($entries['classes.dex'])) {
-            return EnumMimeType::APK;
+            return MimeType::APK;
         }
 
         return null;
@@ -123,9 +123,9 @@ final class ZipMimeDetector implements MimeDetector
     /**
      * @param array<string, true> $entries
      */
-    private static function detectJar(array $entries): ?EnumMimeType
+    private static function detectJar(array $entries): ?MimeType
     {
-        return isset($entries['META-INF/MANIFEST.MF']) ? EnumMimeType::JAR : null;
+        return isset($entries['META-INF/MANIFEST.MF']) ? MimeType::JAR : null;
     }
 
     /**

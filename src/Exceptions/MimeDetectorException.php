@@ -6,7 +6,7 @@ namespace Moudarir\MimeDetector\Exceptions;
 
 use Exception;
 
-class MimeTypeException extends Exception
+class MimeDetectorException extends Exception
 {
 
     public static function fileNotExistOrUnreadable(string $filepath): static

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Moudarir\MimeDetector\Tests\Unit;
 
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
+use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-final class FileInspectorTest extends TestCase
+final class FileResourceTest extends TestCase
 {
 
     private string $filepath;
@@ -37,7 +37,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertSame($this->filepath, $inspector->path());
     }
@@ -47,9 +47,9 @@ final class FileInspectorTest extends TestCase
     {
         $filepath = $this->filepath . '-missing';
 
-        $this->expectException(MimeTypeException::class);
+        $this->expectException(MimeDetectorException::class);
 
-        FileInspector::create($filepath);
+        FileResource::create($filepath);
     }
 
     #[Test]
@@ -57,9 +57,9 @@ final class FileInspectorTest extends TestCase
     {
         $directory = sys_get_temp_dir();
 
-        $this->expectException(MimeTypeException::class);
+        $this->expectException(MimeDetectorException::class);
 
-        FileInspector::create($directory);
+        FileResource::create($directory);
     }
 
     #[Test]
@@ -69,7 +69,7 @@ final class FileInspectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertSame(strlen($content), $inspector->filesize());
     }
@@ -82,7 +82,7 @@ final class FileInspectorTest extends TestCase
             '12345'
         );
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertSame(5, $inspector->filesize());
 
@@ -102,7 +102,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertSame(
             '4142434445464748494A',
@@ -115,7 +115,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertTrue($inspector->startsWithHex('414243'));
         self::assertTrue($inspector->startsWithHex('4142434445'));
@@ -126,7 +126,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertFalse($inspector->startsWithHex('444546'));
     }
@@ -136,7 +136,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertTrue($inspector->startsWithHex('414243'));
         self::assertTrue($inspector->startsWithHex('414243444546'));
@@ -147,7 +147,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertSame('ABC', $inspector->bytes(0, 3));
         self::assertSame('DEF', $inspector->bytes(3, 3));
@@ -159,7 +159,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertSame('414243', $inspector->readHex(0, 3));
         self::assertSame('444546', $inspector->readHex(3, 3));
@@ -171,7 +171,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertNull($inspector->readHex(8, 3));
         self::assertNull($inspector->readHex(10, 1));
@@ -182,7 +182,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertNull($inspector->readHex(-1, 1));
         self::assertNull($inspector->readHex(0, -1));
@@ -195,7 +195,7 @@ final class FileInspectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertSame('WAVE', $inspector->riffType());
     }
@@ -205,7 +205,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertNull($inspector->riffType());
     }
@@ -217,7 +217,7 @@ final class FileInspectorTest extends TestCase
 
         file_put_contents($this->filepath, $content);
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertSame('isom', $inspector->isoBaseMediaBrand());
     }
@@ -227,7 +227,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, 'ABCDEFGHIJ');
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertNull($inspector->isoBaseMediaBrand());
     }
@@ -237,7 +237,7 @@ final class FileInspectorTest extends TestCase
     {
         file_put_contents($this->filepath, "<?php echo 'test';");
 
-        $inspector = FileInspector::create($this->filepath);
+        $inspector = FileResource::create($this->filepath);
 
         self::assertIsString($inspector->fileInfoMime());
     }

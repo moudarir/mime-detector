@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Moudarir\MimeDetector\Enum;
 
-enum EnumMimeType: string
+enum MimeType: string
 {
 
     /*

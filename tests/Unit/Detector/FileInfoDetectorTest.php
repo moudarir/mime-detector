@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Detector\FileInfoMimeDetector;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Detector\FileInfoDetector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\FileResource;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-final class FileInfoMimeDetectorTest extends TestCase
+final class FileInfoDetectorTest extends TestCase
 {
 
     private string $filepath;
@@ -44,7 +44,7 @@ final class FileInfoMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::PDF);
+        self::assertDetectionResult($result, MimeType::PDF);
     }
 
     #[Test]
@@ -57,7 +57,7 @@ final class FileInfoMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::TEXT_PLAIN);
+        self::assertDetectionResult($result, MimeType::TEXT_PLAIN);
     }
 
     #[Test]
@@ -70,7 +70,7 @@ final class FileInfoMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::PHP);
+        self::assertDetectionResult($result, MimeType::PHP);
     }
 
     #[Test]
@@ -78,11 +78,11 @@ final class FileInfoMimeDetectorTest extends TestCase
     {
         $filepath = dirname(__DIR__, 2) . '/Fixtures/Unsupported/filename.sh';
 
-        $inspector = FileInspector::create($filepath);
+        $inspector = FileResource::create($filepath);
 
         self::assertSame('text/x-shellscript', $inspector->fileInfoMime());
 
-        $result = FileInfoMimeDetector::detect($inspector);
+        $result = FileInfoDetector::detect($inspector);
 
         self::assertNull($result);
     }
@@ -97,23 +97,23 @@ final class FileInfoMimeDetectorTest extends TestCase
 
         $result = $this->detect();
 
-        self::assertDetectionResult($result, EnumMimeType::JSON);
+        self::assertDetectionResult($result, MimeType::JSON);
     }
 
     private function detect(): ?DetectionResult
     {
-        return FileInfoMimeDetector::detect(
-            FileInspector::create($this->filepath)
+        return FileInfoDetector::detect(
+            FileResource::create($this->filepath)
         );
     }
 
     private static function assertDetectionResult(
         ?DetectionResult $result,
-        EnumMimeType $expectedMimeType
+        MimeType $expectedMimeType
     ): void {
         self::assertInstanceOf(DetectionResult::class, $result);
         self::assertSame($expectedMimeType, $result->mimeType());
         self::assertSame($expectedMimeType->value, $result->value());
-        self::assertSame(FileInfoMimeDetector::class, $result->detector());
+        self::assertSame(FileInfoDetector::class, $result->detector());
     }
 }

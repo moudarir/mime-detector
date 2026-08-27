@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\FileResource;
 
 interface MimeDetector
 {
 
-    public static function detect(FileInspector $inspector): ?DetectionResult;
+    public static function detect(FileResource $inspector): ?DetectionResult;
 }

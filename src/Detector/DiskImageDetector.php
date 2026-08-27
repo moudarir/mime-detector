@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Enum\EnumMimeType;
-use Moudarir\MimeDetector\Exceptions\MimeTypeException;
-use Moudarir\MimeDetector\FileInspector;
+use Moudarir\MimeDetector\Enum\MimeType;
+use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
+use Moudarir\MimeDetector\FileResource;
 
 /**
  * @internal
@@ -22,9 +22,9 @@ final class DiskImageDetector implements MimeDetector
     private const string DMG_MAGIC = '6B6F6C79'; // ASCII "koly"
 
     /**
-     * @throws MimeTypeException
+     * @throws MimeDetectorException
      */
-    public static function detect(FileInspector $inspector): ?DetectionResult
+    public static function detect(FileResource $inspector): ?DetectionResult
     {
         $mimeType = self::detectIso($inspector) ?? self::detectDmg($inspector);
 
@@ -36,21 +36,21 @@ final class DiskImageDetector implements MimeDetector
     }
 
     /**
-     * @throws MimeTypeException
+     * @throws MimeDetectorException
      */
-    private static function detectIso(FileInspector $inspector): ?EnumMimeType
+    private static function detectIso(FileResource $inspector): ?MimeType
     {
         if ($inspector->readHex(self::ISO_OFFSET, 5) === self::ISO_MAGIC) {
-            return EnumMimeType::ISO;
+            return MimeType::ISO;
         }
 
         return null;
     }
 
     /**
-     * @throws MimeTypeException
+     * @throws MimeDetectorException
      */
-    private static function detectDmg(FileInspector $inspector): ?EnumMimeType
+    private static function detectDmg(FileResource $inspector): ?MimeType
     {
         $filesize = $inspector->filesize();
 
@@ -59,7 +59,7 @@ final class DiskImageDetector implements MimeDetector
         }
 
         if ($inspector->readHex($filesize - self::DMG_TRAILER_SIZE, 4) === self::DMG_MAGIC) {
-            return EnumMimeType::DMG;
+            return MimeType::DMG;
         }
 
         return null;
