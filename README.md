@@ -1,5 +1,7 @@
 # MIME Detector
 
+[![Latest Version](https://img.shields.io/packagist/v/moudarir/mime-detector?style=flat-square)](https://packagist.org/packages/moudarir/mime-detector) [![Tests](https://github.com/moudarir/mime-detector/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/moudarir/mime-detector/actions/workflows/tests.yml) [![PHP Version Require](https://img.shields.io/packagist/dependency-v/moudarir/mime-detector/php?color=%238892bf&style=flat-square)](https://packagist.org/packages/moudarir/mime-detector) [![License](https://img.shields.io/packagist/l/moudarir/mime-detector.svg?style=flat-square)](https://github.com/moudarir/mime-detector/blob/main/LICENSE)
+
 A PHP library for detecting the real MIME type of files by analyzing their content.
 
 Unlike extension-based detection, this library relies on multiple detection strategies:
