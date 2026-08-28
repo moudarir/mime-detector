@@ -9,7 +9,7 @@ Unlike extension-based detection, this library relies on multiple detection stra
 * text format inspection;
 * ISO Base Media analysis (MP4, MOV, AVIF, HEIC...);
 * RIFF container analysis (WEBP, WAV, AVI...);
-* PHP FileInfo/libmagic fallback.
+* PHP FileInfo/libmagic detection.
 
 The goal is to provide a reliable MIME type detection based on the actual file content.
 
@@ -30,39 +30,6 @@ composer require moudarir/mime-detector
 ```
 
 
-## Basic Usage
-
-```php
-use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
-use Moudarir\MimeDetector\Detector;
-
-try {
-    $result = Detector::detect('/path/to/file.pdf');
-    echo $result->mimeValue();
-} catch (MimeDetectorException $exception) {
-    echo $exception->getMessage();
-}
-```
-
-Output:
-
-```text
-application/pdf
-```
-
-You can also retrieve which detector identified the file:
-
-```php
-echo $result->detector();
-```
-
-Example output:
-
-```text
-Moudarir\MimeDetector\Detector\MagicNumberDetector
-```
-
-
 ## Detection Process
 
 The detection pipeline follows a strict order:
@@ -73,6 +40,8 @@ Magic Number Detection
 ZIP Container
       ↓
 Text Detection
+      ↓
+Separated Values
       ↓
 FileInfo/libmagic
       ↓
@@ -184,6 +153,13 @@ Detection is based on the internal ZIP structure, not the file extension.
 
 ---
 
+### Disk Image
+
+* ISO 9660
+* Apple Disk Image `DMG`
+
+---
+
 ### Text Formats
 
 The library detects common text-based formats:
@@ -198,37 +174,86 @@ The library detects common text-based formats:
 * Markdown
 * YAML
 * SQL
-* CSV
-* TSV
 
 Generic text files are handled by PHP FileInfo when no specialized format is detected.
 
 ---
 
+### Separated Values
+
+* CSV
+* TSV
+
+---
+
 ## Example
 
-Detecting a DOCX file:
+Detecting a PDF file:
 
 ```php
+<?php
+
 use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
 use Moudarir\MimeDetector\Detector;
 
-try {
-    $result = Detector::detect('/path/to/file.pdf');
-    echo $result->value();
-    echo PHP_EOL;
-    echo $result->detector();
-} catch (MimeDetectorException $exception) {
-    echo $exception->getMessage();
-}
+require_once '../vendor/autoload.php';
+
+$root_path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+
+$result = Detector::detect($root_path.'tests/Fixtures/document.pdf');
+
+echo '<div style="margin-bottom: 20px;">';
+echo '<h4 style="margin-bottom: 10px;">Mime Type</h4>';
+echo '<pre>';
+var_dump($result->mimeType(), $result->value());
+echo '</pre>';
+echo '</div>';
+
+echo '<div style="margin-bottom: 20px;">';
+echo '<h4 style="margin-bottom: 10px;">Detector</h4>';
+echo '<pre>';
+var_dump($result->detector(), $result->detectorValue());
+echo '</pre>';
+echo '</div>';
+
+echo '<div style="margin-bottom: 20px;">';
+echo '<h4 style="margin-bottom: 10px;">Metadata</h4>';
+echo '<pre>';
+var_dump(
+    $result->filesize(),
+    $result->dirname(),
+    $result->basename(),
+    $result->filename(),
+    $result->extension(),
+);
+echo '</pre>';
+echo '</div>';
 ```
 
 Output:
 
-```text
-application/vnd.openxmlformats-officedocument.wordprocessingml.document
+### Mime Type
 
-Moudarir\MimeDetector\Detector\ZipDetector
+```text
+enum(Moudarir\MimeDetector\Enum\MimeType::PDF)
+string(15) "application/pdf"
+```
+
+### Detector
+
+```text
+enum(Moudarir\MimeDetector\Enum\DetectorSource::MAGIC_NUMBER)
+string(12) "magic_number"
+```
+
+### Metadata
+
+```text
+int(70011)
+string(47) "/Users/user/htdocs/mime-detector/tests/Fixtures"
+string(12) "document.pdf"
+string(8) "document"
+string(3) "pdf"
 ```
 
 ---
@@ -259,7 +284,7 @@ application/pdf
 
 The library includes several optimizations:
 
-* lazy loading of file headers;
+* preload of the file header;
 * caching of binary header data;
 * caching of hexadecimal header representation;
 * stopping detection as soon as a detector succeeds;
