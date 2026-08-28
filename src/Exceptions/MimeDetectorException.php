@@ -23,4 +23,9 @@ class MimeDetectorException extends Exception
     {
         return new static("Unable to read file header `$filepath`.");
     }
+
+    public static function unableToRetrieveFilesize(string $filepath): static
+    {
+        return new static("Unable to retrieve filesize from `$filepath`.");
+    }
 }

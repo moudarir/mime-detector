@@ -55,7 +55,7 @@ final class DiskImageDetector implements MimeDetector
     {
         $filesize = $inspector->filesize();
 
-        if ($filesize === null || $filesize < self::DMG_TRAILER_SIZE) {
+        if ($filesize < self::DMG_TRAILER_SIZE) {
             return null;
         }
 

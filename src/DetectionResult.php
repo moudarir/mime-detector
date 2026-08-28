@@ -13,7 +13,7 @@ final readonly class DetectionResult
     private function __construct(
         private MimeType       $mimeType,
         private DetectorSource $detector,
-        private ?int           $filesize,
+        private int            $filesize,
         private array          $pathInfo,
     )
     {
@@ -59,7 +59,7 @@ final readonly class DetectionResult
         return $this->detector->value;
     }
 
-    public function filesize(): ?int
+    public function filesize(): int
     {
         return $this->filesize;
     }

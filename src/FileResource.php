@@ -14,20 +14,18 @@ final class FileResource
 
     private static ?finfo $finfo = null;
 
-    private ?int $filesize;
-
-    private bool $filesizeResolved = false;
-
     private string $hexHeader;
 
     /**
      * @param string $path
      * @param string $header
+     * @param int $filesize
      * @param resource $stream
      */
     private function __construct(
         private readonly string $path,
         private readonly string $header,
+        private readonly int $filesize,
         private readonly mixed $stream,
     )
     {
@@ -53,9 +51,14 @@ final class FileResource
             throw MimeDetectorException::unableOpenFile($path);
         }
 
+        if (($filesize = @filesize($path)) === false) {
+            throw MimeDetectorException::unableToRetrieveFilesize($path);
+        }
+
         return new self(
             $path,
             self::getBytes($path, $stream, self::HEADER_SIZE),
+            $filesize,
             $stream,
         );
     }
@@ -73,16 +76,8 @@ final class FileResource
         return $this->stream;
     }
 
-    public function filesize(): ?int
+    public function filesize(): int
     {
-        if ($this->filesizeResolved) {
-            return $this->filesize;
-        }
-
-        $size = @filesize($this->path);
-        $this->filesize = $size !== false ? $size : null;
-        $this->filesizeResolved = true;
-
         return $this->filesize;
     }
 
