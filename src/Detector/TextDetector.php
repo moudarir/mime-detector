@@ -39,8 +39,7 @@ final class TextDetector implements MimeDetector
             ?? self::detectJavascript($content)
             ?? self::detectCss($content)
             ?? self::detectYaml($content)
-            ?? self::detectMarkdown($content)
-            ?? self::detectSeparatedValues($content);
+            ?? self::detectMarkdown($content);
 
         if ($mimeType === null) {
             return null;
@@ -150,36 +149,6 @@ final class TextDetector implements MimeDetector
         return self::countContains($content, '# ', '## ', '```', '](', '![', '> ') >= 2
             ? MimeType::MARKDOWN
             : null;
-    }
-
-    private static function detectSeparatedValues(string $content): ?MimeType
-    {
-        foreach (["\t", ',', ';', '|'] as $separator) {
-            if (self::hasSeparator($content, $separator)) {
-                return $separator === "\t" ? MimeType::TSV : MimeType::TEXT_CSV;
-            }
-        }
-
-        return null;
-    }
-
-    private static function hasSeparator(string $content, string $separator): bool
-    {
-        $lines = preg_split('/\R/', trim($content));
-
-        if (!is_array($lines)) {
-            return false;
-        }
-
-        $matches = 0;
-
-        foreach (array_slice($lines, 0, 5) as $line) {
-            if (str_contains($line, $separator)) {
-                ++$matches;
-            }
-        }
-
-        return $matches >= 2;
     }
 
     private static function startsWithAny(string $content, string ...$values): bool

@@ -149,16 +149,6 @@ This is a paragraph.
 ## Section',
             MimeType::MARKDOWN,
         ];
-
-        yield 'CSV' => [
-            "name,age,city\nJohn,20,Paris\nJane,25,Lyon",
-            MimeType::TEXT_CSV,
-        ];
-
-        yield 'TSV' => [
-            "name\tage\tcity\nJohn\t20\tParis\nJane\t25\tLyon",
-            MimeType::TSV,
-        ];
     }
 
     #[Test]

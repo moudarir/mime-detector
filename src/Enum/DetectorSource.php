@@ -14,6 +14,7 @@ enum DetectorSource: string
     case MAGIC_NUMBER = 'magic_number';
     case RIFF = 'riff';
     case TEXT = 'text';
+    case SEPARATED_VALUES = 'separated_values';
     case ZIP = 'zip';
     case FALLBACK = 'fallback';
 }

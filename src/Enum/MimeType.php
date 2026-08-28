@@ -88,7 +88,7 @@ enum MimeType: string
      * Text / fallback FileInfo
      */
     case TEXT_PLAIN = 'text/plain';
-    case TEXT_CSV = 'text/csv';
+    case CSV = 'text/csv';
     case XML = 'application/xml';
     case JSON = 'application/json';
     case HTML = 'text/html';

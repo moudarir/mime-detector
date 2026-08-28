@@ -44,6 +44,11 @@
   "scripts": {
     "server-start": "bash public/server-start.sh",
     "server-stop": "bash public/server-stop.sh",
-    "test:unit": "phpunit tests/Unit"
+    "test:unit": "phpunit tests/Unit",
+    "test:integration": "phpunit tests/Integration",
+    "test": [
+      "@test:unit",
+      "@test:integration"
+    ]
   }
 }

@@ -21,9 +21,23 @@ final class FileResource
     private string $hexHeader;
 
     /**
+     * @param string $path
+     * @param string $header
+     * @param resource $stream
      */
-    private function __construct(private readonly string $path, private readonly string $header)
+    private function __construct(
+        private readonly string $path,
+        private readonly string $header,
+        private readonly mixed $stream,
+    )
     {
+    }
+
+    public function __destruct()
+    {
+        if (isset($this->stream) && is_resource($this->stream)) {
+            fclose($this->stream);
+        }
     }
 
     /**
@@ -35,12 +49,28 @@ final class FileResource
             throw MimeDetectorException::fileNotExistOrUnreadable($path);
         }
 
-        return new self($path, self::getBytes($path, self::HEADER_SIZE));
+        if (($stream = @fopen($path, 'rb')) === false) {
+            throw MimeDetectorException::unableOpenFile($path);
+        }
+
+        return new self(
+            $path,
+            self::getBytes($path, $stream, self::HEADER_SIZE),
+            $stream,
+        );
     }
 
     public function path(): string
     {
         return $this->path;
+    }
+
+    /**
+     * @return resource
+     */
+    public function stream(): mixed
+    {
+        return $this->stream;
     }
 
     public function filesize(): ?int
@@ -73,7 +103,7 @@ final class FileResource
             return null;
         }
 
-        $bytes = self::getBytes($this->path, $length, $offset);
+        $bytes = self::getBytes($this->path, $this->stream,  $length, $offset);
 
         if (strlen($bytes) !== $length) {
             return null;
@@ -138,25 +168,17 @@ final class FileResource
     /**
      * @throws MimeDetectorException
      */
-    private static function getBytes(string $path, int $length, int $offset = 0): string
+    private static function getBytes(string $path, mixed $stream, int $length, int $offset = 0): string
     {
-        if (($handle = @fopen($path, 'rb')) === false) {
-            throw MimeDetectorException::unableOpenFile($path);
+        if (fseek($stream, $offset) !== 0) {
+            throw MimeDetectorException::unableReadFileHeader($path);
         }
 
-        try {
-            if (fseek($handle, $offset) !== 0) {
-                throw MimeDetectorException::unableReadFileHeader($path);
-            }
-
-            if (($bytes = fread($handle, $length)) === false) {
-                throw MimeDetectorException::unableReadFileHeader($path);
-            }
-
-            return $bytes;
-        } finally {
-            fclose($handle);
+        if (($bytes = fread($stream, $length)) === false) {
+            throw MimeDetectorException::unableReadFileHeader($path);
         }
+
+        return $bytes;
     }
 
     public static function toHex(string $content): string
