@@ -79,11 +79,7 @@ final class FileInfoDetectorTest extends TestCase
     {
         $filepath = dirname(__DIR__, 2) . '/Fixtures/Unsupported/filename.sh';
 
-        $inspector = FileResource::create($filepath);
-
-        self::assertSame('text/x-shellscript', $inspector->fileInfoMime());
-
-        $result = FileInfoDetector::detect($inspector);
+        $result = FileInfoDetector::detect(FileResource::create($filepath));
 
         self::assertNull($result);
     }

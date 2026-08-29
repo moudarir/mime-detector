@@ -28,4 +28,9 @@ class MimeDetectorException extends Exception
     {
         return new static("Unable to retrieve filesize from `$filepath`.");
     }
+
+    public static function unableToDetermineLastModified(): self
+    {
+        return new self("Unable to determine the file last modified.");
+    }
 }

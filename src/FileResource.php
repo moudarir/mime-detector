@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Moudarir\MimeDetector;
 
-use finfo;
 use Moudarir\MimeDetector\Exceptions\MimeDetectorException;
 
 final class FileResource
@@ -12,20 +11,20 @@ final class FileResource
 
     private const int HEADER_SIZE = 64;
 
-    private static ?finfo $finfo = null;
-
     private string $hexHeader;
 
     /**
      * @param string $path
      * @param string $header
      * @param int $filesize
+     * @param int $lastModified
      * @param resource $stream
      */
     private function __construct(
         private readonly string $path,
         private readonly string $header,
         private readonly int $filesize,
+        private readonly int $lastModified,
         private readonly mixed $stream,
     )
     {
@@ -55,10 +54,15 @@ final class FileResource
             throw MimeDetectorException::unableToRetrieveFilesize($path);
         }
 
+        if (($lastModified = filemtime($path)) === false) {
+            throw MimeDetectorException::unableToDetermineLastModified();
+        }
+
         return new self(
             $path,
             self::getBytes($path, $stream, self::HEADER_SIZE),
             $filesize,
+            $lastModified,
             $stream,
         );
     }
@@ -79,6 +83,11 @@ final class FileResource
     public function filesize(): int
     {
         return $this->filesize;
+    }
+
+    public function lastModified(): int
+    {
+        return $this->lastModified;
     }
 
     /**
@@ -105,18 +114,6 @@ final class FileResource
         }
 
         return self::toHex($bytes);
-    }
-
-    /**
-     * Brut detection with libmagic.
-     */
-    public function fileInfoMime(): ?string
-    {
-        self::$finfo ??= new finfo(FILEINFO_MIME_TYPE);
-
-        $mime = self::$finfo->file($this->path);
-
-        return $mime !== false ? $mime : null;
     }
 
     /**

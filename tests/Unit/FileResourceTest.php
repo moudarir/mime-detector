@@ -231,14 +231,4 @@ final class FileResourceTest extends TestCase
 
         self::assertNull($inspector->isoBaseMediaBrand());
     }
-
-    #[Test]
-    public function itReturnsFileInfoMimeType(): void
-    {
-        file_put_contents($this->filepath, "<?php echo 'test';");
-
-        $inspector = FileResource::create($this->filepath);
-
-        self::assertIsString($inspector->fileInfoMime());
-    }
 }

@@ -14,6 +14,8 @@ final readonly class DetectionResult
         private MimeType       $mimeType,
         private DetectorSource $detector,
         private int            $filesize,
+        private int            $lastModified,
+        private mixed          $stream,
         private array          $pathInfo,
     )
     {
@@ -35,6 +37,8 @@ final readonly class DetectionResult
             $mimeType,
             $detector,
             $inspector->filesize(),
+            $inspector->lastModified(),
+            $inspector->stream(),
             $info
         );
     }
@@ -62,6 +66,19 @@ final readonly class DetectionResult
     public function filesize(): int
     {
         return $this->filesize;
+    }
+
+    public function lastModified(): int
+    {
+        return $this->lastModified;
+    }
+
+    /**
+     * @return resource
+     */
+    public function stream(): mixed
+    {
+        return $this->stream;
     }
 
     public function dirname(): string
