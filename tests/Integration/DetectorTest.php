@@ -36,22 +36,13 @@ final class DetectorTest extends TestCase
         $path = $this->fixture('document.pdf');
 
         $result = Detector::detect($path);
+        $metadata = $result->metadata();
 
-        self::assertSame(filesize($path), $result->filesize());
-        self::assertSame(dirname($path), $result->dirname());
-        self::assertSame('document.pdf', $result->basename());
-        self::assertSame('document', $result->filename());
-        self::assertSame('pdf', $result->extension());
-
-        self::assertSame(
-            [
-                'dirname' => dirname($path),
-                'basename' => 'document.pdf',
-                'extension' => 'pdf',
-                'filename' => 'document',
-            ],
-            $result->pathInfo()
-        );
+        self::assertSame(filesize($path), $metadata->filesize());
+        self::assertSame(dirname($path), $metadata->dirname());
+        self::assertSame('document.pdf', $metadata->basename());
+        self::assertSame('document', $metadata->filename());
+        self::assertSame('pdf', $metadata->extension());
     }
 
     #[Test]

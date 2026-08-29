@@ -73,10 +73,7 @@ final class DetectionResultTest extends TestCase
 
         $result = $this->createResult(MimeType::PDF);
 
-        self::assertSame(
-            strlen($content),
-            $result->filesize()
-        );
+        self::assertSame(strlen($content), $result->metadata()->filesize());
     }
 
     #[Test]
@@ -90,6 +87,7 @@ final class DetectionResultTest extends TestCase
         file_put_contents($this->filepath, '%PDF-1.7');
 
         $result = $this->createResult(MimeType::PDF);
+        $metadata = $result->metadata();
 
         self::assertSame(
             [
@@ -98,7 +96,12 @@ final class DetectionResultTest extends TestCase
                 'extension' => 'pdf',
                 'filename' => pathinfo($this->filepath, PATHINFO_FILENAME),
             ],
-            $result->pathInfo()
+            [
+                'dirname' => $metadata->dirname(),
+                'basename' => $metadata->basename(),
+                'extension' => $metadata->extension(),
+                'filename' => $metadata->filename(),
+            ]
         );
     }
 
@@ -106,13 +109,22 @@ final class DetectionResultTest extends TestCase
     public function itReturnsEmptyExtensionForFileWithoutExtension(): void
     {
         $result = $this->createResult(MimeType::PDF);
+        $metadata = $result->metadata();
 
-        $pathInfo = $result->pathInfo();
-
-        self::assertSame(dirname($this->filepath), $pathInfo['dirname']);
-        self::assertSame(basename($this->filepath), $pathInfo['basename']);
-        self::assertSame('', $pathInfo['extension']);
-        self::assertSame(basename($this->filepath), $pathInfo['filename']);
+        self::assertSame(
+            [
+                dirname($this->filepath),
+                basename($this->filepath),
+                '',
+                basename($this->filepath),
+            ],
+            [
+                $metadata->dirname(),
+                $metadata->basename(),
+                $metadata->extension(),
+                $metadata->filename(),
+            ]
+        );
     }
 
     private function createResult(MimeType $mimeType): DetectionResult

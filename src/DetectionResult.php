@@ -13,33 +13,17 @@ final readonly class DetectionResult
     private function __construct(
         private MimeType       $mimeType,
         private DetectorSource $detector,
-        private int            $filesize,
-        private int            $lastModified,
-        private mixed          $stream,
-        private array          $pathInfo,
+        private FileMetadata   $metadata,
     )
     {
     }
 
     public static function create(FileResource $inspector, MimeType $mimeType, DetectorSource $detector): self
     {
-        $info = pathinfo($inspector->path());
-
-        if (!array_key_exists('extension', $info)) {
-            $info['extension'] = '';
-        }
-
-        if (!array_key_exists('filename', $info)) {
-            $info['filename'] = '';
-        }
-
         return new self(
             $mimeType,
             $detector,
-            $inspector->filesize(),
-            $inspector->lastModified(),
-            $inspector->stream(),
-            $info
+            FileMetadata::create($inspector),
         );
     }
 
@@ -63,54 +47,8 @@ final readonly class DetectionResult
         return $this->detector->value;
     }
 
-    public function filesize(): int
+    public function metadata(): FileMetadata
     {
-        return $this->filesize;
-    }
-
-    public function lastModified(): int
-    {
-        return $this->lastModified;
-    }
-
-    /**
-     * @return resource
-     */
-    public function stream(): mixed
-    {
-        return $this->stream;
-    }
-
-    public function dirname(): string
-    {
-        return $this->pathInfo['dirname'];
-    }
-
-    public function basename(): string
-    {
-        return $this->pathInfo['basename'];
-    }
-
-    public function filename(): string
-    {
-        return $this->pathInfo['filename'];
-    }
-
-    public function extension(): string
-    {
-        return $this->pathInfo['extension'];
-    }
-
-    /**
-     * @return array{
-     *     dirname: string,
-     *     basename: string,
-     *     extension: string,
-     *     filename: string
-     * }
-     */
-    public function pathInfo(): array
-    {
-        return $this->pathInfo;
+        return $this->metadata;
     }
 }

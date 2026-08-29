@@ -30,13 +30,6 @@ final class FileResource
     {
     }
 
-    public function __destruct()
-    {
-        if (isset($this->stream) && is_resource($this->stream)) {
-            fclose($this->stream);
-        }
-    }
-
     /**
      * @throws MimeDetectorException
      */

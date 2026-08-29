@@ -203,6 +203,7 @@ require_once '../vendor/autoload.php';
 $root_path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
 
 $result = Detector::detect($root_path.'tests/Fixtures/document.pdf');
+$metadata = $result->metadata();
 
 echo '<div style="margin-bottom: 20px;">';
 echo '<h4 style="margin-bottom: 10px;">Mime Type</h4>';
@@ -222,11 +223,11 @@ echo '<div style="margin-bottom: 20px;">';
 echo '<h4 style="margin-bottom: 10px;">Metadata</h4>';
 echo '<pre>';
 var_dump(
-    $result->filesize(),
-    $result->dirname(),
-    $result->basename(),
-    $result->filename(),
-    $result->extension(),
+    $metadata->filesize(),
+    $metadata->dirname(),
+    $metadata->basename(),
+    $metadata->filename(),
+    $metadata->extension(),
 );
 echo '</pre>';
 echo '</div>';
