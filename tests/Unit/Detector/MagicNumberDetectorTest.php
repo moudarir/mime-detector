@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace Moudarir\MimeDetector\Tests\Unit\Detector;
 
 use Moudarir\MimeDetector\DetectionResult;
-use Moudarir\MimeDetector\Detector\DiskImageDetector;
-use Moudarir\MimeDetector\Detector\ImageDetector;
-use Moudarir\MimeDetector\Detector\IsoBaseMediaDetector;
 use Moudarir\MimeDetector\Detector\MagicNumberDetector;
-use Moudarir\MimeDetector\Detector\RiffDetector;
 use Moudarir\MimeDetector\Enum\DetectorSource;
 use Moudarir\MimeDetector\Enum\MimeType;
 use Moudarir\MimeDetector\FileResource;
